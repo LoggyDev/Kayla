@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photos</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --card-bg: #ffffff;
+      --text: #16151a;
+      --muted: #6b6a72;
+      --accent: #d7c6a3;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    /* Grid gallery — every tile is the same size, images zoom to fill it */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 24px 60px;
+    }
+
+    .image-card {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--card-bg);
+    }
+
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* =========================
+       FULLSCREEN VIEWER
+       ========================= */
+
+    .viewer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+
+      background: rgba(10, 10, 12, 0.96);
+      backdrop-filter: blur(6px);
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewer.active {
+      display: flex;
+    }
+
+    .viewer-image {
+      max-width: calc(100vw - 120px);
+      max-height: calc(100vh - 60px);
+
+      width: auto;
+      height: auto;
+
+      object-fit: contain;
+      user-select: none;
+    }
+
+    /* Viewer buttons */
+
+    .viewer button {
+      position: absolute;
+
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+
+      width: 46px;
+      height: 46px;
+
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .viewer button:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .close {
+      top: 20px;
+      right: 20px;
+      font-size: 26px !important;
+    }
+
+    .previous {
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .next {
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .counter {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.06);
+
+      padding: 6px 16px;
+
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    /* Tablet */
+    @media (max-width: 1000px) {
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2px;
+        padding: 2px;
+      }
+
+      .viewer-image {
+        max-width: calc(100vw - 60px);
+        max-height: calc(100vh - 80px);
+      }
+
+      .viewer button {
+        width: 38px;
+        height: 38px;
+      }
+
+      .previous {
+        left: 6px;
+      }
+
+      .next {
+        right: 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="gallery" id="gallery"></main>
+
+
+  <!-- Photo Viewer -->
+
+  <div class="viewer" id="viewer">
+
+    <button class="close" onclick="closeViewer()">×</button>
+
+    <button class="previous" onclick="previousImage()">‹</button>
+
+    <img
+      id="viewerImage"
+      class="viewer-image"
+      src=""
+      alt="Photo"
+    >
+
+    <button class="next" onclick="nextImage()">›</button>
+
+    <div class="counter" id="counter">
+      1 / 4
+    </div>
+
+  </div>
+
+
+  <script>
+    // Just list your filenames here — the gallery and viewer build themselves from this.
+    const images = [
+      "snoop3.png",
+      "snoop2.png",
+      "snoop1.png",
+      "snoop4.png",
+	"snoop5.png",
+"snoop6.png"
+    ];
+
+    let currentImage = 0;
+
+    const gallery = document.getElementById("gallery");
+    const viewer = document.getElementById("viewer");
+    const viewerImage = document.getElementById("viewerImage");
+    const counter = document.getElementById("counter");
+
+
+    function buildGallery() {
+      images.forEach((src, index) => {
+        const card = document.createElement("div");
+        card.className = "image-card";
+        card.onclick = () => openViewer(index);
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "Photo " + (index + 1);
+        img.loading = "lazy";
+
+        card.appendChild(img);
+        gallery.appendChild(card);
+      });
+    }
+
+    buildGallery();
+
+
+    function openViewer(index) {
+      currentImage = index;
+
+      updateViewer();
+
+      viewer.classList.add("active");
+
+      document.body.style.overflow = "hidden";
+    }
+
+
+    function closeViewer() {
+      viewer.classList.remove("active");
+
+      document.body.style.overflow = "";
+    }
+
+
+    function updateViewer() {
+      viewerImage.src = images[currentImage];
+
+      counter.textContent =
+        `${currentImage + 1} / ${images.length}`;
+    }
+
+
+    function nextImage() {
+      currentImage++;
+
+      if (currentImage >= images.length) {
+        currentImage = 0;
+      }
+
+      updateViewer();
+    }
+
+
+    function previousImage() {
+      currentImage--;
+
+      if (currentImage < 0) {
+        currentImage = images.length - 1;
+      }
+
+      updateViewer();
+    }
+
+
+    // Keyboard controls
+
+    document.addEventListener("keydown", function(event) {
+
+      if (!viewer.classList.contains("active")) {
+        return;
+      }
+
+      if (event.key === "Escape") {
+        closeViewer();
+      }
+
+      if (event.key === "ArrowRight") {
+        nextImage();
+      }
+
+      if (event.key === "ArrowLeft") {
+        previousImage();
+      }
+
+    });
+
+
+    // Click outside image to close
+
+    viewer.addEventListener("click", function(event) {
+
+      if (event.target === viewer) {
+        closeViewer();
+      }
+
+    });
+  </script>
+
+</body>
+</html>
