@@ -22,10 +22,34 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Helvetica, Arial, sans-serif;
     }
 
-    /* Grid gallery — every tile is the same size, images zoom to fill it */
+    /* SCROLLING TEXT AT THE TOP */
+
+    .scrolling-text {
+      width: 100%;
+      overflow: hidden;
+      background: #ffffff;
+      color: #ff69b4;
+      font-family: "Comic Sans MS", "Comic Sans", cursive;
+      font-size: 28px;
+      font-weight: bold;
+      padding: 8px 0;
+
+      /* Disable font smoothing where supported */
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeSpeed;
+    }
+
+    .scrolling-text marquee {
+      display: block;
+    }
+
+    /* GRID GALLERY */
+
     .gallery {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -50,19 +74,15 @@
       object-fit: contain;
     }
 
-    /* =========================
-       FULLSCREEN VIEWER
-       ========================= */
+    /* FULLSCREEN VIEWER */
 
     .viewer {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 1000;
-
       background: rgba(10, 10, 12, 0.96);
       backdrop-filter: blur(6px);
-
       align-items: center;
       justify-content: center;
     }
@@ -74,26 +94,21 @@
     .viewer-image {
       max-width: calc(100vw - 120px);
       max-height: calc(100vh - 60px);
-
       width: auto;
       height: auto;
-
       object-fit: contain;
       user-select: none;
     }
 
-    /* Viewer buttons */
+    /* VIEWER BUTTONS */
 
     .viewer button {
       position: absolute;
-
       border: none;
       background: rgba(255, 255, 255, 0.08);
       color: var(--text);
-
       width: 46px;
       height: 46px;
-
       font-size: 24px;
       cursor: pointer;
     }
@@ -124,27 +139,28 @@
       position: absolute;
       bottom: 22px;
       left: 50%;
-
       transform: translateX(-50%);
-
       color: var(--muted);
       background: rgba(255, 255, 255, 0.06);
-
       padding: 6px 16px;
-
       font-size: 12px;
       letter-spacing: 0.08em;
     }
 
-    /* Tablet */
+    /* TABLET */
+
     @media (max-width: 1000px) {
       .gallery {
         grid-template-columns: repeat(3, 1fr);
       }
     }
 
-    /* Mobile */
+    /* MOBILE */
+
     @media (max-width: 600px) {
+      .scrolling-text {
+        font-size: 22px;
+      }
 
       .gallery {
         grid-template-columns: repeat(2, 1fr);
@@ -175,10 +191,19 @@
 
 <body>
 
+  <!-- SCROLLING TEXT -->
+
+  <div class="scrolling-text">
+    <marquee scrollamount="6" direction="left">
+		I love you Kayla today, tomorrow, and forever... <3
+    </marquee>
+  </div>
+
+  <!-- PHOTO GALLERY -->
+
   <main class="gallery" id="gallery"></main>
 
-
-  <!-- Photo Viewer -->
+  <!-- PHOTO VIEWER -->
 
   <div class="viewer" id="viewer">
 
@@ -196,30 +221,30 @@
     <button class="next" onclick="nextImage()">›</button>
 
     <div class="counter" id="counter">
-      1 / 4
+      1 / 16
     </div>
 
   </div>
 
-
   <script>
     const images = [
-	  "snoop16.png",
-	  "snoop15.png",
-	  "snoop13.png",
-	  "snoop14.png",
-	  "snoop12.png",
-	  "snoop7.png",
+		"1.png", "2.png", "3.png", "4.png","5.png", "6.png",
+      "snoop16.png",
+      "snoop15.png",
+      "snoop13.png",
+      "snoop14.png",
+      "snoop12.png",
+      "snoop7.png",
       "snoop3.png",
       "snoop2.png",
       "snoop1.png",
       "snoop4.png",
-	  "snoop5.png",
+      "snoop5.png",
       "snoop6.png",
-	  "snoop8.png",
-	  "snoop9.png",
-	  "snoop11.png",
-	  "snoop10.png"
+      "snoop8.png",
+      "snoop9.png",
+      "snoop11.png",
+      "snoop10.png"
     ];
 
     let currentImage = 0;
@@ -228,7 +253,6 @@
     const viewer = document.getElementById("viewer");
     const viewerImage = document.getElementById("viewerImage");
     const counter = document.getElementById("counter");
-
 
     function buildGallery() {
       images.forEach((src, index) => {
@@ -248,32 +272,23 @@
 
     buildGallery();
 
-
     function openViewer(index) {
       currentImage = index;
-
       updateViewer();
-
       viewer.classList.add("active");
-
       document.body.style.overflow = "hidden";
     }
 
-
     function closeViewer() {
       viewer.classList.remove("active");
-
       document.body.style.overflow = "";
     }
 
-
     function updateViewer() {
       viewerImage.src = images[currentImage];
-
       counter.textContent =
         `${currentImage + 1} / ${images.length}`;
     }
-
 
     function nextImage() {
       currentImage++;
@@ -285,7 +300,6 @@
       updateViewer();
     }
 
-
     function previousImage() {
       currentImage--;
 
@@ -296,11 +310,9 @@
       updateViewer();
     }
 
-
-    // Keyboard controls
+    // KEYBOARD CONTROLS
 
     document.addEventListener("keydown", function(event) {
-
       if (!viewer.classList.contains("active")) {
         return;
       }
@@ -316,18 +328,14 @@
       if (event.key === "ArrowLeft") {
         previousImage();
       }
-
     });
 
-
-    // Click outside image to close
+    // CLICK OUTSIDE IMAGE TO CLOSE
 
     viewer.addEventListener("click", function(event) {
-
       if (event.target === viewer) {
         closeViewer();
       }
-
     });
   </script>
 
