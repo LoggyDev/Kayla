@@ -27,23 +27,22 @@
     }
 
     /* SCROLLING TEXT AT THE TOP */
-
-    .scrolling-text {
-      width: 100%;
-      overflow: hidden;
-      background: #ffffff;
-      color: #ff69b4;
-      font-family: "Comic Sans MS", "Comic Sans", cursive;
-      font-size: 28px;
-      font-weight: bold;
-      padding: 8px 0;
-
-      /* Disable font smoothing where supported */
-      -webkit-font-smoothing: none;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeSpeed;
-    }
-
+	@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+	
+	.scrolling-text {
+	    width: 100%;
+	    overflow: hidden;
+	    background: #000000;
+	    color: #ff69b4;
+	    font-family: 'Pixelify Sans', cursive;
+	    font-size: 32px;
+	    font-weight: 500;
+	    padding: 8px 0;
+	
+	    -webkit-font-smoothing: none;
+	    -moz-osx-font-smoothing: grayscale;
+	    text-rendering: pixelated;
+}
     .scrolling-text marquee {
       display: block;
     }
