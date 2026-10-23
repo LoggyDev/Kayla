@@ -27,15 +27,13 @@
     }
 
     /* SCROLLING TEXT AT THE TOP */
-	@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
-	
 	.scrolling-text {
 	    width: 100%;
 	    overflow: hidden;
 	    background: #ffffff;
 	    color: #000000;
-	    font-family: 'Pixelify Sans';
-	    font-size: 32px;
+	    font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif;
+	    font-size: 16px;
 	    font-weight: 500;
 	    padding: 8px 0;
 	
@@ -203,7 +201,6 @@
   <main class="gallery" id="gallery"></main>
 
   <!-- PHOTO VIEWER -->
-
   <div class="viewer" id="viewer">
 
     <button class="close" onclick="closeViewer()">×</button>
@@ -227,23 +224,28 @@
 
   <script>
     const images = [
-		"1.png", "2.png", "3.png", "4.png","5.png", "6.png",
-      "snoop16.png",
-      "snoop15.png",
-      "snoop13.png",
-      "snoop14.png",
-      "snoop12.png",
-      "snoop7.png",
-      "snoop3.png",
-      "snoop2.png",
-      "snoop1.png",
-      "snoop4.png",
-      "snoop5.png",
-      "snoop6.png",
-      "snoop8.png",
-      "snoop9.png",
-      "snoop11.png",
-      "snoop10.png"
+	"1.png", 
+	"2.png", 
+	"3.png", 
+	"4.png",
+	"5.png", 
+	"6.png",
+	"snoop16.png",
+	"snoop15.png",
+	"snoop13.png",
+	"snoop14.png",
+	"snoop12.png",
+	"snoop7.png",
+	"snoop3.png",
+	"snoop2.png",
+	"snoop1.png",
+	"snoop4.png",
+	"snoop5.png",
+	"snoop6.png",
+	"snoop8.png",
+	"snoop9.png",
+	"snoop11.png",
+	"snoop10.png"
     ];
 
     let currentImage = 0;
